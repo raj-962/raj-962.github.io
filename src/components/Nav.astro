@@ -1,0 +1,56 @@
+---
+const path = Astro.url.pathname;
+const items = [
+  ['/', 'Home'], ['/work/', 'Work'], ['/frames/', 'Frames'],
+  ['/notes/', 'Notes'], ['/story/', 'Story'], ['/contact/', 'Contact'],
+];
+const active = (h: string) => (h === '/' ? path === '/' : path.startsWith(h));
+---
+<header class="nav-shell">
+  <nav class="glass nav" aria-label="Main">
+    <a class="logo sig" href="/" aria-label="Raja Shekar, home">RS</a>
+    <ul>
+      {items.map(([h, l]) => (
+        <li><a href={h} aria-current={active(h) ? 'page' : undefined}>{l}</a></li>
+      ))}
+    </ul>
+    <button class="knob" id="theme-toggle" type="button" aria-label="Switch between Darkroom and Daylight theme" aria-pressed="false">
+      <span class="knob-dot"></span>
+    </button>
+  </nav>
+</header>
+<style>
+  .nav-shell{position:fixed;top:14px;left:0;right:0;z-index:50;display:flex;justify-content:center;padding:0 14px;pointer-events:none}
+  .nav{pointer-events:auto;display:flex;align-items:center;gap:18px;padding:8px 12px 8px 18px;border-radius:999px;transition:padding .25s,gap .25s}
+  .logo{font-size:1.6rem;text-decoration:none;line-height:1}
+  ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}
+  li a{display:block;padding:.45rem .9rem;border-radius:999px;text-decoration:none;font-size:.95rem;color:var(--muted)}
+  li a:hover{color:var(--text)}
+  li a[aria-current]{color:var(--accent-ink);background:var(--accent)}
+  .knob{width:46px;height:26px;border-radius:999px;border:1px solid var(--edge);background:linear-gradient(#1b1e24,#383d48);position:relative;cursor:pointer;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
+  .knob-dot{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#aab2bd);box-shadow:0 2px 4px rgba(0,0,0,.5);transition:transform .2s}
+  :global([data-theme="light"]) .knob{background:linear-gradient(#c9d0d8,#e3e7ec)}
+  :global([data-theme="light"]) .knob-dot{transform:translateX(20px)}
+  @media (max-width:760px){
+    .nav-shell{top:auto;bottom:12px}
+    .nav{gap:4px;padding:6px 8px;max-width:100%}
+    .knob{width:40px;flex:none}
+    .knob-dot{width:18px;height:18px}
+    .logo{display:none}
+    li a{padding:.45rem .5rem;font-size:.78rem}
+    ul{gap:0}
+    :global([data-theme="light"]) .knob-dot{transform:translateX(14px)}
+  }
+</style>
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  const sync = () => btn?.setAttribute('aria-pressed', String(root.dataset.theme === 'light'));
+  sync();
+  btn?.addEventListener('click', () => {
+    const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+    sync();
+  });
+</script>

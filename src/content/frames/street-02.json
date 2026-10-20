@@ -1,0 +1,10 @@
+{
+ "image": "../../assets/photos/street-02.jpg",
+ "alt": "Sample placeholder image, replace with a real photo",
+ "title": "Street 02 (sample)",
+ "series": "street",
+ "date": "2026-09-02",
+ "caption": "Placeholder. Upload your own photos to replace it.",
+ "place": "Bengaluru",
+ "sample": true
+}

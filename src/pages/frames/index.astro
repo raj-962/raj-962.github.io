@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import Gallery from '../../components/Gallery.astro';
+const series = (await getCollection('series')).sort((a, b) => a.data.order - b.data.order);
+const frames = (await getCollection('frames')).sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base title="Frames" description="Photography by Raja Shekar: street, nature and campus.">
+  <div class="wrap page">
+    <p class="eyebrow">Frames</p><h1 class="sig">Light, caught</h1>
+    <ul class="chips" style="margin:18px 0 30px">
+      {series.map((s) => <li><a class="chip" href={`/frames/${s.id}/`}>{s.data.title}</a></li>)}
+    </ul>
+    <Gallery frames={frames} />
+  </div>
+</Base>

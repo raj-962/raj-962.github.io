@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Work" description="Chip design, verification and embedded projects by Raja Shekar.">
+  <div class="wrap page">
+    <p class="eyebrow">Work</p><h1 class="sig">Things I have built</h1>
+    <div class="grid" style="margin-top:30px">
+      {projects.map((p) => (
+        <a class="glass card" href={`/work/${p.id}/`}>
+          <p class="eyebrow">{p.data.area}</p><h3>{p.data.title}</h3>
+          <p class="muted">{p.data.summary}</p>
+          <ul class="chips">{p.data.tools.map((t) => <li class="chip">{t}</li>)}</ul>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import Gallery from '../../components/Gallery.astro';
+export async function getStaticPaths() {
+  const all = await getCollection('frames');
+  return (await getCollection('series')).map((s) => ({
+    params: { series: s.id },
+    props: { s, frames: all.filter((f) => f.data.series === s.id).sort((a, b) => +b.data.date - +a.data.date) },
+  }));
+}
+const { s, frames } = Astro.props;
+---
+<Base title={s.data.title} description={s.data.blurb}>
+  <div class="wrap page">
+    <p class="eyebrow"><a href="/frames/">← Frames</a></p>
+    <h1 class="sig">{s.data.title}</h1><p class="muted">{s.data.blurb}</p>
+    <div style="margin-top:28px"><Gallery frames={frames} /></div>
+  </div>
+</Base>

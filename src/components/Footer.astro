@@ -1,0 +1,10 @@
+---
+import settings from '../content/data/settings.json';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© {year} {settings.name}. Made in {settings.location}.</span>
+    <span><a href={settings.github} rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/resume/">Resume</a></span>
+  </div>
+</footer>

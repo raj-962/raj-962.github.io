@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import timeline from '../content/data/timeline.json';
+---
+<Base title="Story" description="The path so far: school, UVCE, awards and a Siemens internship.">
+  <div class="wrap page">
+    <p class="eyebrow">Story</p><h1 class="sig">The path so far</h1>
+    <p class="prose muted">I study electronics at UVCE, design and verify digital chips, and spend weekends with a camera or a chessboard. I speak English, Hindi, Kannada and Telugu.</p>
+    <ol class="timeline" style="margin-top:40px">
+      {timeline.map((t) => <li><b>{t.year}</b><h3>{t.title}</h3><p class="muted">{t.text}</p></li>)}
+    </ol>
+    <h2 style="margin-top:40px">Recognition</h2>
+    <ul class="prose">
+      <li>Siemens Scholar, Holistic Development Track, Batch 11</li>
+      <li>Impetus 24.0 Summit, runner-up</li>
+      <li>Fiesta G2C2 Treasure Hunt, winners</li>
+    </ul>
+  </div>
+</Base>

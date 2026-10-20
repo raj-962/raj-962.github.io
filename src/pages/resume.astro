@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { existsSync } from 'node:fs';
+const has = existsSync('./public/resumes/Raja_Shekar_Resume.pdf');
+---
+<Base title="Resume" description="Resume of Raja Shekar.">
+  <div class="wrap page prose">
+    <p class="eyebrow">Resume</p><h1 class="sig">Resume</h1>
+    {has
+      ? <p><a class="btn" href="/resumes/Raja_Shekar_Resume.pdf" download>Download PDF</a></p>
+      : <p class="muted">The PDF is not uploaded yet. Put it at <code>public/resumes/Raja_Shekar_Resume.pdf</code> and this button appears.</p>}
+    <h2>At a glance</h2>
+    <ul>
+      <li>B.E. Electronics and Communication, UVCE Bengaluru, CGPA 9.48/10</li>
+      <li>Verilog, SystemVerilog, C, Python (basic), Arduino, ESP32</li>
+      <li>Cadence Virtuoso, OpenLane, LTspice, Vivado, GTKWave, Git</li>
+      <li>Siemens Limited summer intern, 2026</li>
+    </ul>
+  </div>
+</Base>

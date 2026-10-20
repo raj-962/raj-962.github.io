@@ -1,0 +1,10 @@
+{
+ "image": "../../assets/photos/campus-01.jpg",
+ "alt": "Sample placeholder image, replace with a real photo",
+ "title": "Campus 01 (sample)",
+ "series": "campus",
+ "date": "2026-07-25",
+ "caption": "Placeholder. Upload your own photos to replace it.",
+ "place": "Bengaluru",
+ "sample": true
+}

@@ -1,0 +1,5 @@
+[
+  { "id": "street", "title": "Street", "blurb": "People, light and the in-between moments of Bengaluru.", "order": 1 },
+  { "id": "nature", "title": "Nature", "blurb": "Quiet frames, slow light.", "order": 2 },
+  { "id": "campus", "title": "Campus", "blurb": "UVCE, friends and the places we learn in.", "order": 3 }
+]

@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+const { frames } = Astro.props;
+---
+<div class="photo-grid">
+  {frames.map((f: any) => (
+    <figure>
+      <button type="button" class="open" data-full={f.data.image.src} data-cap={`${f.data.title}${f.data.place ? ' · ' + f.data.place : ''}`} aria-label={`Open ${f.data.title}`} style="all:unset;display:block;cursor:zoom-in">
+        <Image src={f.data.image} alt={f.data.alt} widths={[400, 800]} sizes="(max-width:700px) 100vw, 360px" loading="lazy" />
+      </button>
+      <figcaption>{f.data.title}</figcaption>
+    </figure>
+  ))}
+</div>
+<dialog class="lightbox" id="lb" aria-label="Photo viewer">
+  <button class="btn ghost" type="button" id="lb-close">Close</button>
+  <img id="lb-img" alt="" /><p id="lb-cap"></p>
+</dialog>
+<script>
+  const dlg = document.getElementById('lb') as HTMLDialogElement;
+  const img = document.getElementById('lb-img') as HTMLImageElement;
+  const cap = document.getElementById('lb-cap')!;
+  document.querySelectorAll<HTMLButtonElement>('.open').forEach((b) =>
+    b.addEventListener('click', () => {
+      const src = b.querySelector('img')!;
+      img.src = b.dataset.full!; img.alt = src.alt; cap.textContent = b.dataset.cap ?? '';
+      dlg.showModal();
+    }));
+  document.getElementById('lb-close')!.addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+</script>

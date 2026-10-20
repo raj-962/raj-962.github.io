@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import settings from '../content/data/settings.json';
+import quotes from '../content/data/quotes.json';
+import { existsSync } from 'node:fs';
+
+const frames = (await getCollection('frames')).sort((a, b) => +b.data.date - +a.data.date);
+const pile = frames.slice(0, 3);
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+const dayIndex = Math.floor(Date.now() / 86400000) % quotes.length; // changes each daily rebuild
+const quote = quotes[dayIndex];
+const hasPortrait = existsSync('./public/images/portrait.jpg');
+const hasResume = existsSync('./public/resumes/Raja_Shekar_Resume.pdf');
+---
+<Base>
+  <section class="hero" data-lens="both" id="hero">
+    <div class="half eng" aria-hidden="true"><div class="gridlines"></div>
+      <svg viewBox="0 0 400 120" preserveAspectRatio="none"><path d="M0 60 H60 V30 H120 V90 H180 V30 H240 V90 H300 V60 H400" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    </div>
+    <div class="half pho" aria-hidden="true"></div>
+
+    <aside class="quote glass" aria-label="Quote of the day">
+      <p class="eyebrow">Quote of the day</p>
+      <p class="q sig">“{quote.text}”</p>
+      <p class="by">{quote.by}</p>
+    </aside>
+
+    <div class="center wrap">
+      <p class="eyebrow">ECE · UVCE Bengaluru</p>
+      <h1 class="sig">{settings.name}</h1>
+      <p class="tag">{settings.tagline}</p>
+      <div class="cta">
+        <a class="btn" href="/work/">See my work</a>
+        <a class="btn ghost" href="/frames/">See my frames</a>
+      </div>
+      <div class="resume">
+        {hasResume
+          ? <a class="btn ghost" href="/resumes/Raja_Shekar_Resume.pdf" download>Resume (PDF)</a>
+          : <a class="btn ghost" href="/resume/">Resume</a>}
+        <img class="portrait" src={hasPortrait ? '/images/portrait.jpg' : '/images/portrait-placeholder.svg'} alt={hasPortrait ? 'Portrait of Raja Shekar' : 'Portrait placeholder'} width="88" height="88" />
+      </div>
+
+      <div class="dial" role="radiogroup" aria-label="Choose what to emphasise">
+        <button role="radio" aria-checked="false" data-v="engineer" type="button">Engineer</button>
+        <button role="radio" aria-checked="true" data-v="both" type="button">Both</button>
+        <button role="radio" aria-checked="false" data-v="photographer" type="button">Photographer</button>
+      </div>
+    </div>
+
+    <div class="status glass"><span class="led"></span>{settings.status.label}</div>
+
+    <a class="latest" href="/frames/" aria-label="Latest frames">
+      {pile.map((f, i) => (
+        <span class={`print p${i}`}><Image src={f.data.image} alt={f.data.alt} width={220} height={150} /></span>
+      ))}
+      <span class="lab glass">Latest frame</span>
+    </a>
+  </section>
+
+  <section class="wrap strip">
+    <h2>Selected work</h2>
+    <div class="grid">
+      {projects.map((p) => (
+        <a class="glass card" href={`/work/${p.id}/`}>
+          <p class="eyebrow">{p.data.area}</p><h3>{p.data.title}</h3>
+          <p class="muted">{p.data.summary}</p>
+        </a>
+      ))}
+    </div>
+    <p style="margin-top:20px"><a href="/work/">All projects →</a></p>
+  </section>
+
+  <section class="wrap strip">
+    <h2>Now</h2>
+    <ul class="chips">{settings.now.map((n) => <li class="chip">{n}</li>)}</ul>
+  </section>
+</Base>
+
+<style>
+  .hero{position:relative;min-height:100svh;display:grid;align-items:center;overflow:hidden;padding:110px 0 80px}
+  .half{position:absolute;top:0;bottom:0;transition:opacity .5s,flex .5s}
+  .eng{left:0;width:50%;background:var(--eng);color:var(--silver)}
+  .pho{right:0;width:50%;background:var(--pho)}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(var(--base),transparent 30%,transparent 70%,var(--base));opacity:.55;pointer-events:none}
+  .gridlines{position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:36px 36px}
+  .eng svg{position:absolute;left:0;right:0;top:46%;width:100%;height:120px;opacity:.5}
+  .hero[data-lens="engineer"] .eng{width:80%} .hero[data-lens="engineer"] .pho{width:20%;opacity:.6}
+  .hero[data-lens="photographer"] .pho{width:80%} .hero[data-lens="photographer"] .eng{width:20%;opacity:.6}
+  .center{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .center .eyebrow{color:var(--text);text-shadow:0 1px 8px rgba(0,0,0,.55)}
+  :global([data-theme="light"]) .center .eyebrow{text-shadow:none}
+  .center h1{font-size:clamp(3.2rem,11vw,7.5rem);margin:0;color:var(--text);text-shadow:0 4px 30px rgba(0,0,0,.35)}
+  :global([data-theme="light"]) .center h1{text-shadow:none}
+  .tag{font-size:1.2rem;margin:0 0 14px;color:var(--text)}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .resume{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:18px}
+  .portrait{width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid var(--edge);box-shadow:var(--shadow)}
+  .quote{position:absolute;z-index:3;top:96px;left:20px;max-width:300px;padding:16px 18px}
+  .quote .q{font-size:1.3rem;line-height:1.3;margin:0 0 6px}
+  .quote .by{margin:0;font-size:.8rem;color:var(--muted)}
+  .quote .eyebrow{margin-bottom:6px}
+  .dial{display:flex;margin-top:22px;padding:4px;border-radius:999px;background:linear-gradient(#1b1e24,#2a2f38);border:1px solid var(--edge);box-shadow:inset 0 2px 6px rgba(0,0,0,.5)}
+  :global([data-theme="light"]) .dial{background:linear-gradient(#cfd5dc,#e8ecf0)}
+  .dial button{font:500 .9rem 'Inter Variable',sans-serif;padding:.5rem 1rem;border:0;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer}
+  .dial button[aria-checked="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 6px rgba(0,0,0,.35)}
+  .status{position:absolute;z-index:3;bottom:84px;left:20px;padding:.4rem .9rem;border-radius:999px;font-size:.9rem;display:flex;align-items:center;gap:8px}
+  .led{width:10px;height:10px;border-radius:50%;background:var(--led);box-shadow:0 0 8px var(--led)}
+  .latest{position:absolute;z-index:3;right:28px;bottom:84px;width:230px;height:190px;text-decoration:none}
+  .print{position:absolute;display:block;padding:7px 7px 24px;background:#f6f3ec;box-shadow:0 10px 24px rgba(0,0,0,.4);transition:transform .25s}
+  .print :global(img){display:block;width:200px;height:auto}
+  .p0{right:0;bottom:0;transform:rotate(4deg);z-index:3}
+  .p1{right:26px;bottom:14px;transform:rotate(-5deg);z-index:2}
+  .p2{right:6px;bottom:24px;transform:rotate(9deg);z-index:1}
+  .latest:hover .p0{transform:rotate(1deg) translateY(-6px)}
+  .lab{position:absolute;z-index:4;left:-10px;top:-14px;padding:.25rem .7rem;border-radius:999px;font-size:.8rem;color:var(--text)}
+  .strip{padding-top:70px;padding-bottom:30px}
+  @media (max-width:900px){
+    .quote{position:relative;top:auto;left:auto;margin:0 20px 22px;max-width:none;z-index:3}
+    .hero{align-content:center;grid-auto-rows:min-content;padding-bottom:130px}
+    .latest,.status{position:relative;inset:auto;margin:26px auto 0;display:block}
+    .status{width:max-content;display:flex}
+    .latest{width:230px}
+  }
+</style>
+<script>
+  const hero = document.getElementById('hero');
+  const radios = hero?.querySelectorAll<HTMLButtonElement>('.dial [role=radio]') ?? [];
+  const set = (v: string) => {
+    hero!.dataset.lens = v;
+    radios.forEach((r) => r.setAttribute('aria-checked', String(r.dataset.v === v)));
+  };
+  radios.forEach((r, i) => {
+    r.addEventListener('click', () => set(r.dataset.v!));
+    r.addEventListener('keydown', (e) => {
+      const k = (e as KeyboardEvent).key;
+      if (k === 'ArrowRight' || k === 'ArrowLeft') {
+        const n = radios[(i + (k === 'ArrowRight' ? 1 : radios.length - 1)) % radios.length];
+        n.focus(); set(n.dataset.v!);
+      }
+    });
+  });
+</script>

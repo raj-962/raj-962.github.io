@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import settings from '../content/data/settings.json';
+---
+<Base title="Contact" description="Get in touch with Raja Shekar.">
+  <div class="wrap page">
+    <p class="eyebrow">Contact</p><h1 class="sig">Say hello</h1>
+    <p class="prose muted">The email address is assembled in your browser so spam bots cannot read it.</p>
+    <p><a class="btn" id="mail" href="#" data-u={settings.email_user} data-d={settings.email_domain}>Email me</a>
+       <a class="btn ghost" href={settings.github} rel="noopener">GitHub</a></p>
+    {settings.web3forms_key && (
+      <form class="form" action="https://api.web3forms.com/submit" method="POST" style="margin-top:34px">
+        <input type="hidden" name="access_key" value={settings.web3forms_key} />
+        <label>Name<input name="name" required autocomplete="name" /></label>
+        <label>Email<input name="email" type="email" required autocomplete="email" /></label>
+        <label>Message<textarea name="message" rows="5" required></textarea></label>
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
+        <button class="btn" type="submit">Send</button>
+      </form>
+    )}
+  </div>
+</Base>
+<script>
+  const a = document.getElementById('mail') as HTMLAnchorElement;
+  a.href = `mailto:${a.dataset.u}@${a.dataset.d}`;
+</script>
