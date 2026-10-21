@@ -47,7 +47,9 @@ const hasResume = existsSync('./public/resumes/Raja_Shekar_Resume.pdf');
         <p class="q sig">“{quote.text}”</p>
         <p class="by">{quote.by}</p>
       </aside>
-      <div class="profile glass">
+    </div>
+
+    <div class="profile glass">
         {hasResume
           ? <a class="btn" href="/resumes/Raja_Shekar_Resume.pdf" download>Resume (PDF)</a>
           : <a class="btn" href="/resume/">Resume</a>}
@@ -56,7 +58,6 @@ const hasResume = existsSync('./public/resumes/Raja_Shekar_Resume.pdf');
           : <span class="portrait initials sig" aria-hidden="true">RS</span>}
         <span class="status"><span class="led"></span>{settings.status.label}</span>
       </div>
-    </div>
 
     <a class="latest" href="/frames/" aria-label="Latest frames">
       {pile.map((f, i) => (
@@ -127,7 +128,7 @@ const hasResume = existsSync('./public/resumes/Raja_Shekar_Resume.pdf');
   .quote .eyebrow{margin-bottom:6px}
   .quote .q{font-size:1.25rem;line-height:1.3;margin:0 0 6px}
   .quote .by{margin:0;font-size:.8rem;color:var(--muted)}
-  .profile{padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .profile{position:absolute;z-index:4;top:96px;right:20px;width:200px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px}
   .portrait{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid var(--edge);box-shadow:var(--shadow)}
   .initials{display:grid;place-items:center;font-size:1.9rem;background:linear-gradient(145deg,var(--accent),color-mix(in srgb,var(--accent) 40%,#000));color:var(--accent-ink)}
   .status{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted)}
@@ -153,8 +154,8 @@ const hasResume = existsSync('./public/resumes/Raja_Shekar_Resume.pdf');
     .hero{min-height:0;display:flex;flex-direction:column;padding:0 0 10px}
     .intro{order:1;padding-top:96px;padding-bottom:20px}
     .intro h1{text-shadow:none}
-    .rail{order:2;position:relative;top:auto;left:auto;width:auto;margin:0 20px 18px}
-    .profile{flex-direction:row;justify-content:space-between;flex-wrap:wrap}
+    .rail{order:2;position:relative;top:auto;left:auto;width:auto;margin:0 20px 14px}
+    .profile{order:2;position:relative;top:auto;right:auto;width:auto;margin:0 20px 18px;flex-direction:row;justify-content:space-between;flex-wrap:wrap}
     .doors{order:3;position:relative;inset:auto;display:flex;flex-direction:column;gap:14px;padding:0 20px}
     .doors:has(.pho:hover),.doors:has(.eng:hover){grid-template-columns:none}
     .door{min-height:190px;padding:20px;border-radius:var(--radius);justify-content:flex-start;align-items:flex-end}
