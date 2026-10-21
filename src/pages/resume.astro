@@ -4,17 +4,14 @@ import { existsSync } from 'node:fs';
 const has = existsSync('./public/resumes/Raja_Shekar_Resume.pdf');
 ---
 <Base title="Resume" description="Resume of Raja Shekar.">
-  <div class="wrap page prose">
-    <p class="eyebrow">Resume</p><h1 class="sig">Resume</h1>
-    {has
-      ? <p><a class="btn" href="/resumes/Raja_Shekar_Resume.pdf" download>Download PDF</a></p>
-      : <p class="muted">The PDF is not uploaded yet. Put it at <code>public/resumes/Raja_Shekar_Resume.pdf</code> and this button appears.</p>}
-    <h2>At a glance</h2>
-    <ul>
-      <li>B.E. Electronics and Communication, UVCE Bengaluru, CGPA 9.48/10</li>
-      <li>Verilog, SystemVerilog, C, Python (basic), Arduino, ESP32</li>
-      <li>Cadence Virtuoso, OpenLane, LTspice, Vivado, GTKWave, Git</li>
-      <li>Siemens Limited summer intern, 2026</li>
-    </ul>
+  <div class="wrap page">
+    <div class="page-head"><p class="eyebrow">Resume</p><h1 class="sig">Resume</h1>
+      <p class="lede">{has ? 'The full PDF is one click away.' : 'The PDF will appear here once it is uploaded. The highlights are below.'}</p>
+      {has && <p class="actions" style="margin-top:18px"><a class="btn" href="/resumes/Raja_Shekar_Resume.pdf" download>Download PDF</a></p>}</div>
+    <div class="grid">
+      <div class="glass card"><p class="eyebrow">Education</p><h3>UVCE, Bengaluru</h3><p class="muted">B.E. Electronics and Communication, 2023 to present. CGPA 9.48/10.</p></div>
+      <div class="glass card"><p class="eyebrow">Experience</p><h3>Siemens Limited</h3><p class="muted">Summer intern, Pondicherry, 2026. Power BI dashboard for EHS.</p></div>
+      <div class="glass card"><p class="eyebrow">Skills</p><h3>Design and tools</h3><p class="muted">Verilog, SystemVerilog, C, Python (basic), Arduino, ESP32, Cadence Virtuoso, OpenLane, LTspice, Vivado, Git.</p></div>
+    </div>
   </div>
 </Base>

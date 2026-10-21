@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+const { current = 'all' } = Astro.props;
+const series = (await getCollection('series')).sort((a, b) => a.data.order - b.data.order);
+const frames = await getCollection('frames');
+const count = (id?: string) => frames.filter((f) => !id || f.data.series === id).length;
+---
+<ul class="pills" aria-label="Photo series">
+  <li><a class="pill" href="/frames/" aria-current={current === 'all' ? 'page' : undefined}>All ({count()})</a></li>
+  {series.map((s) => (
+    <li><a class="pill" href={`/frames/${s.id}/`} aria-current={current === s.id ? 'page' : undefined}>{s.data.title} ({count(s.id)})</a></li>
+  ))}
+</ul>

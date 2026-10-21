@@ -8,9 +8,9 @@ const { n } = Astro.props;
 const { Content } = await render(n);
 ---
 <Base title={n.data.title} description={n.data.summary}>
-  <article class="wrap page prose">
+  <article class="wrap page"><div class="prose">
     <p class="eyebrow"><a href="/notes/">← Notes</a> · {n.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
     <h1 class="sig">{n.data.title}</h1>
     <Content />
-  </article>
+  </div></article>
 </Base>

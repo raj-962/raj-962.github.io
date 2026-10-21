@@ -2,13 +2,19 @@
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const areas = [...new Set(projects.map((p) => p.data.area))];
 ---
 <Base title="Work" description="Chip design, verification and embedded projects by Raja Shekar.">
   <div class="wrap page">
-    <p class="eyebrow">Work</p><h1 class="sig">Things I have built</h1>
-    <div class="grid" style="margin-top:30px">
+    <div class="page-head"><p class="eyebrow">Work</p><h1 class="sig">Things I have built</h1>
+      <p class="lede">Digital design, verification, physical design, analog and embedded projects from coursework and self-study.</p></div>
+    <ul class="pills" id="filters" aria-label="Filter by area">
+      <li><button class="pill" type="button" data-f="all" aria-pressed="true">All ({projects.length})</button></li>
+      {areas.map((a) => <li><button class="pill" type="button" data-f={a} aria-pressed="false">{a}</button></li>)}
+    </ul>
+    <div class="grid" id="cards">
       {projects.map((p) => (
-        <a class="glass card" href={`/work/${p.id}/`}>
+        <a class="glass card" data-area={p.data.area} href={`/work/${p.id}/`}>
           <p class="eyebrow">{p.data.area}</p><h3>{p.data.title}</h3>
           <p class="muted">{p.data.summary}</p>
           <ul class="chips">{p.data.tools.map((t) => <li class="chip">{t}</li>)}</ul>
@@ -17,3 +23,11 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
     </div>
   </div>
 </Base>
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('#filters .pill');
+  const cards = document.querySelectorAll<HTMLElement>('#cards .card');
+  btns.forEach((b) => b.addEventListener('click', () => {
+    btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    cards.forEach((c) => (c.hidden = b.dataset.f !== 'all' && c.dataset.area !== b.dataset.f));
+  }));
+</script>

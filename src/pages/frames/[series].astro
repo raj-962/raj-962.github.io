@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import Gallery from '../../components/Gallery.astro';
+import SeriesTabs from '../../components/SeriesTabs.astro';
 export async function getStaticPaths() {
   const all = await getCollection('frames');
   return (await getCollection('series')).map((s) => ({
@@ -13,8 +14,8 @@ const { s, frames } = Astro.props;
 ---
 <Base title={s.data.title} description={s.data.blurb}>
   <div class="wrap page">
-    <p class="eyebrow"><a href="/frames/">← Frames</a></p>
-    <h1 class="sig">{s.data.title}</h1><p class="muted">{s.data.blurb}</p>
-    <div style="margin-top:28px"><Gallery frames={frames} /></div>
+    <div class="page-head"><p class="eyebrow">Frames</p><h1 class="sig">{s.data.title}</h1><p class="lede">{s.data.blurb}</p></div>
+    <SeriesTabs current={s.id} />
+    <Gallery frames={frames} />
   </div>
 </Base>

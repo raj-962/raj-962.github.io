@@ -6,11 +6,14 @@ const fmt = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 
 ---
 <Base title="Notes" description="Writing on chip design, photography and chess.">
   <div class="wrap page">
-    <p class="eyebrow">Notes</p><h1 class="sig">Things I am figuring out</h1>
-    <div class="grid" style="margin-top:30px">
+    <div class="page-head"><p class="eyebrow">Notes</p><h1 class="sig">Things I am figuring out</h1>
+      <p class="lede">Short writing on chip design, photography and chess. <a href="/rss.xml">Subscribe by RSS</a>.</p></div>
+    {notes.length === 0 && <p class="muted">Nothing published yet.</p>}
+    <div class="grid">
       {notes.map((n) => (
         <a class="glass card" href={`/notes/${n.id}/`}>
           <p class="eyebrow">{fmt(n.data.date)}</p><h3>{n.data.title}</h3><p class="muted">{n.data.summary}</p>
+          <span class="more">Read note →</span>
         </a>
       ))}
     </div>

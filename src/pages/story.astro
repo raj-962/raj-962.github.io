@@ -4,16 +4,24 @@ import timeline from '../content/data/timeline.json';
 ---
 <Base title="Story" description="The path so far: school, UVCE, awards and a Siemens internship.">
   <div class="wrap page">
-    <p class="eyebrow">Story</p><h1 class="sig">The path so far</h1>
-    <p class="prose muted">I study electronics at UVCE, design and verify digital chips, and spend weekends with a camera or a chessboard. I speak English, Hindi, Kannada and Telugu.</p>
-    <ol class="timeline" style="margin-top:40px">
-      {timeline.map((t) => <li><b>{t.year}</b><h3>{t.title}</h3><p class="muted">{t.text}</p></li>)}
-    </ol>
-    <h2 style="margin-top:40px">Recognition</h2>
-    <ul class="prose">
-      <li>Siemens Scholar, Holistic Development Track, Batch 11</li>
-      <li>Impetus 24.0 Summit, runner-up</li>
-      <li>Fiesta G2C2 Treasure Hunt, winners</li>
-    </ul>
+    <div class="page-head"><p class="eyebrow">Story</p><h1 class="sig">The path so far</h1>
+      <p class="lede">An electronics student who likes designing chips and photographing light.</p></div>
+    <div class="cols">
+      <ol class="timeline">
+        {timeline.map((t) => <li><b>{t.year}</b><h3>{t.title}</h3><p class="muted">{t.text}</p></li>)}
+      </ol>
+      <aside class="side">
+        <div class="glass card"><p class="eyebrow">Beyond engineering</p>
+          <h3>Photography and chess</h3><p class="muted">Weekends go to street frames around Bengaluru and games on the board.</p></div>
+        <div class="glass card"><p class="eyebrow">Recognition</p>
+          <ul class="muted" style="margin:0;padding-left:1.1em"><li>Siemens Scholar, Batch 11</li><li>Impetus 24.0 Summit, runner-up</li><li>Fiesta G2C2 Treasure Hunt, winners</li></ul></div>
+        <div class="glass card"><p class="eyebrow">Languages</p><p style="margin:0">English, Hindi, Kannada, Telugu</p></div>
+      </aside>
+    </div>
   </div>
 </Base>
+<style>
+  .cols{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:50px;align-items:start}
+  .side{display:grid;gap:16px;position:sticky;top:100px}
+  @media (max-width:860px){.cols{grid-template-columns:1fr}.side{position:static}}
+</style>

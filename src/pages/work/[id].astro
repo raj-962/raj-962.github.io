@@ -2,17 +2,30 @@
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
 export async function getStaticPaths() {
-  return (await getCollection('projects')).map((p) => ({ params: { id: p.id }, props: { p } }));
+  const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  return all.map((p, i) => ({ params: { id: p.id }, props: { p, next: all[(i + 1) % all.length] } }));
 }
-const { p } = Astro.props;
+const { p, next } = Astro.props;
 const { Content } = await render(p);
 ---
 <Base title={p.data.title} description={p.data.summary}>
-  <article class="wrap page prose">
-    <p class="eyebrow"><a href="/work/">← Work</a> · {p.data.area}</p>
-    <h1 class="sig">{p.data.title}</h1>
-    <ul class="chips" style="margin-bottom:24px">{p.data.tools.map((t) => <li class="chip">{t}</li>)}</ul>
-    <Content />
-    {p.data.repo && <p><a class="btn ghost" href={p.data.repo} rel="noopener">View on GitHub</a></p>}
+  <article class="wrap page">
+    <p class="eyebrow"><a href="/work/">← All work</a></p>
+    <div class="page-head"><p class="eyebrow">{p.data.area}</p><h1 class="sig">{p.data.title}</h1><p class="lede">{p.data.summary}</p></div>
+    <div class="detail">
+      <div class="prose"><Content /></div>
+      <aside class="glass meta">
+        <h3>Tools</h3>
+        <ul class="chips">{p.data.tools.map((t) => <li class="chip">{t}</li>)}</ul>
+        {p.data.repo && <p style="margin-top:20px"><a class="btn" href={p.data.repo} rel="noopener">View on GitHub</a></p>}
+      </aside>
+    </div>
+    <a class="glass card next" href={`/work/${next.id}/`}><span class="eyebrow">Next project</span><h3>{next.data.title} →</h3></a>
   </article>
 </Base>
+<style>
+  .detail{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:start}
+  .meta{padding:22px}
+  .next{margin-top:56px;max-width:420px}
+  @media (max-width:820px){.detail{grid-template-columns:1fr}}
+</style>
